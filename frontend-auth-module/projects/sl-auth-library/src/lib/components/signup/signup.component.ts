@@ -11,6 +11,7 @@ export class SignupComponent implements OnInit {
   type: string = 'password';
   isText: boolean = false;
   display: string = "visibility_off";
+  matching: boolean = false;
   SignupForm!: FormGroup
   constructor(private fb: FormBuilder) { }
 
@@ -31,6 +32,12 @@ export class SignupComponent implements OnInit {
   }
 
   onSubmit(){
-    console.log(this.SignupForm.value);
+    console.log(this.SignupForm.value.password);
+    if(this.SignupForm.value.password === this.SignupForm.value.confirmPassword){
+      this.matching = false;
+    }
+    else{
+      this.matching = true;
+    }
   }
 }

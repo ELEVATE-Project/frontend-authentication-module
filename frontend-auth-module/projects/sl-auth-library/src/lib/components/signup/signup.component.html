@@ -38,6 +38,7 @@
                         <mat-icon (click)="hideshowPass()">{{display}}</mat-icon>
                     </div>
                     <small *ngIf="SignupForm.controls['confirmPassword'].dirty && SignupForm.hasError('required','confirmPassword')">Re-enter password</small>
+                    <small *ngIf="matching">password not matching</small>
                 </div>
             </div>
             <div class="submission">

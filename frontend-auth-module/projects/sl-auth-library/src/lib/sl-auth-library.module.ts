@@ -22,7 +22,7 @@ import {MatIconModule} from "@angular/material/icon";
     FormsModule,
     ReactiveFormsModule,
     CommonModule,
-    MatIconModule
+    MatIconModule,
   ],
   exports: [
     SignupComponent
