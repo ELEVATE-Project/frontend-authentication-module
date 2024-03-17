@@ -1,1 +1,57 @@
-<p>signup works!</p>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<div class="header">
+    <div class="head-arrow">
+        <mat-icon>keyboard_backspace</mat-icon>
+    </div>
+</div>
+<div class="content-wrapper">
+    <div class="signup wrapper">
+        <form [formGroup]="SignupForm" (ngSubmit)="onSubmit()">
+            <div class="generic-header">
+                <div class="text-config">
+                    Sign up to Mentor<span class="text-green">ED</span>
+                </div>
+            </div>
+            <div class="content">
+                <div class="fields" [class.error]="SignupForm.controls['name'].dirty && SignupForm.hasError('required','name')">
+                    <p class="label">Name</p>
+                    <input type="text" class="form-control" formControlName="name">
+                    <small *ngIf="SignupForm.controls['name'].dirty && SignupForm.hasError('required','name')">Enter your Name</small>
+                </div>
+                <div class="fields" [class.error]="SignupForm.controls['email'].dirty && SignupForm.hasError('required','email')">
+                    <p class="label">Email</p>
+                    <input type="email" class="form-control" formControlName="email">
+                    <small *ngIf="SignupForm.controls['email'].dirty && SignupForm.hasError('required','email')">Please enter registered email ID</small>
+                </div>
+                <div class="fields" [class.error]="SignupForm.controls['password'].dirty && SignupForm.hasError('required','password')">
+                    <p class="label">Password</p>
+                    <div class="pass-field" >
+                        <input [type]="type" class="form-control-1" formControlName="password">
+                        <mat-icon (click)="hideshowPass()">{{display}}</mat-icon>
+                    </div>
+                    <small *ngIf="SignupForm.controls['password'].dirty && SignupForm.hasError('required','password')">Enter password</small>
+                </div>
+                <div class="fields" [class.error]="SignupForm.controls['confirmPassword'].dirty && SignupForm.hasError('required','confirmPassword')">
+                    <p class="label">Confirm Password</p>
+                    <div class="pass-field">
+                        <input [type]="type" class="form-control-1" formControlName="confirmPassword">
+                        <mat-icon (click)="hideshowPass()">{{display}}</mat-icon>
+                    </div>
+                    <small *ngIf="SignupForm.controls['confirmPassword'].dirty && SignupForm.hasError('required','confirmPassword')">Re-enter password</small>
+                    <small *ngIf="matching">password not matching</small>
+                </div>
+            </div>
+            <div class="submission">
+                <div class="submit-button">
+                    <button mat-button type="submit" class="submit" [disabled]="SignupForm.invalid">Sign up</button>
+                </div>
+                <div class="login-button">
+                    <p>Have an account already?</p>
+                    <a href="">Login</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
