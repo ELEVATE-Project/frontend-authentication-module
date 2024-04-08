@@ -3,7 +3,9 @@ import { BrowserModule } from '@angular/platform-browser';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { SlAuthLibraryModule } from 'sl-auth-library';
+import { SlAuthLibraryModule } from 'projects/sl-auth-library/src/public-api';
+import { CommonModule } from '@angular/common';
+
 
 @NgModule({
   declarations: [
@@ -12,7 +14,8 @@ import { SlAuthLibraryModule } from 'sl-auth-library';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    SlAuthLibraryModule
+    SlAuthLibraryModule,
+    CommonModule
   ],
   providers: [],
   bootstrap: [AppComponent]
