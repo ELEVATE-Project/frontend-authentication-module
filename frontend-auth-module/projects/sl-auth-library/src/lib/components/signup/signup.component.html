@@ -1,1 +1,106 @@
-<p>signup works!</p>
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<div class="header">
+    <div class="head-arrow">
+        <mat-icon>keyboard_backspace</mat-icon>
+    </div>
+</div>
+<div class="content-wrapper">
+    <div class="signup wrapper">
+        <form [formGroup]="SignupForm" (ngSubmit)="onSubmit()">
+            <div class="generic-header">
+                <div class="text-config">
+                    Sign up to Mentor<span class="text-green">ED</span>
+                </div>
+            </div>
+            <div class="content">
+                <div class="fields" [class.error]="(SignupForm.controls['name'].dirty ||SignupForm.controls['name'].touched)  && SignupForm.hasError('required','name')">
+                    <mat-form-field>
+                        <div [class.active]="isActiveName && !SignupForm.get('name')?.invalid">
+                            <p class="label">Name <span class="required">*</span></p>
+                        </div>
+                        <input matInput type="text" (focus)="isActiveName = true" (blur)="isActiveName = false" class="form-control" formControlName="name" [class.error]="(SignupForm.controls['name'].dirty ||SignupForm.controls['name'].touched)  && SignupForm.hasError('required','name')">
+                        <small class="error_message_outer" *ngIf="SignupForm.controls['name'].dirty && SignupForm.hasError('required','name')">
+                            <mat-icon class="error_outline">error_outline</mat-icon>
+                            <span class="error_message_inner">
+                                Enter your name
+                            </span>
+                        </small>
+                    </mat-form-field>
+                </div>
+                <div class="fields" [class.error]="(SignupForm.controls['email'].dirty ||SignupForm.controls['email'].touched)  && SignupForm.hasError('required','email')">
+                    <mat-form-field>
+                        <div [class.active]="isActiveName && !SignupForm.get('email')?.invalid">
+                            <p class="label">Email <span class="required">*</span></p>
+                        </div>
+                        <input matInput type="email" class="form-control" (focus)="isActiveName = true" (blur)="isActiveName = false" formControlName="email" [class.error]="(SignupForm.controls['email'].dirty ||SignupForm.controls['email'].touched)  && SignupForm.hasError('required','email')">
+                        <small class="error_message_outer" *ngIf="SignupForm.controls['email'].dirty && SignupForm.hasError('required','email')">
+                            <mat-icon class="error_outline">error_outline</mat-icon>
+                            <span class="error_message_inner">
+                                Please enter registered email ID
+                            </span>
+                        </small>
+                    </mat-form-field>
+                </div>
+                    <div class="fields">
+                        <div class="container-outer">
+                            <div class="container-inner" [class.error]="(SignupForm.controls['password'].dirty ||SignupForm.controls['password'].touched)  && SignupForm.hasError('required','password')">
+                                <div [class.active]="isActiveName && !SignupForm.get('password')?.invalid">
+                                    <p class="label">Password <span class="required">*</span></p>
+                                </div>
+                                <div class="pass-field" [class.error]="(SignupForm.controls['password'].dirty ||SignupForm.controls['password'].touched)  && SignupForm.hasError('required','password')">
+                                    <mat-form-field class="form-control-1">
+                                        <input (focus)="isActiveName = true" (blur)="isActiveName = false" matInput [type]="type"  formControlName="password">
+                                    </mat-form-field>
+                                </div>
+                            </div>
+                            <div class="visibility">
+                                <mat-icon class="hideshow" (click)="hideshowPass()">{{isText? "visibility":"visibility_off"}}</mat-icon>
+                            </div>
+                        </div>
+                        <small class="error_message_outer"*ngIf="SignupForm.controls['password'].dirty && SignupForm.hasError('required','password')">
+                            <mat-icon class="error_outline">error_outline</mat-icon>
+                            <span class="error_message_inner">
+                                Enter password
+                            </span>
+                        </small>
+                        <small *ngIf="SignupForm.controls['password'].dirty && SignupForm.controls['password'].hasError('minlength')">Password must be at least 8 characters long.</small>
+                    </div>
+                <div class="fields">
+                    <div class="container-outer">
+                        <div class="container-inner" [class.error]="(SignupForm.controls['confirmPassword'].dirty ||SignupForm.controls['confirmPassword'].touched)  && SignupForm.hasError('required','confirmPassword')">
+                            <div [class.active]="isActiveName && !SignupForm.get('confirmPassword')?.invalid">
+                                <p class="label">Confirm Password <span class="required">*</span></p>
+                            </div>
+                            <div class="pass-field" [class.error]="(SignupForm.controls['confirmPassword'].dirty ||SignupForm.controls['confirmPassword'].touched)  && SignupForm.hasError('required','confirmPassword')">
+                                <mat-form-field class="form-control-1">
+                                    <input matInput (focus)="isActiveName = true" (blur)="isActiveName = false" [type]="type" class="form-control-1" formControlName="confirmPassword">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="visibility">
+                            <mat-icon class="hideshow" (click)="hideshowPass()">{{isText? "visibility":"visibility_off"}}</mat-icon>
+                        </div>
+                    </div>
+                    <small class="error_message_outer" *ngIf="SignupForm.controls['confirmPassword'].dirty && SignupForm.hasError('required','confirmPassword') ">
+                        <mat-icon class="error_outline">error_outline</mat-icon>
+                        <span class="error_message_inner">
+                            Re-enter password
+                        </span>
+                    </small>
+                    <small *ngIf="f['confirmPassword'].errors && f['confirmPassword'].errors['mustMatch']">Password do not match</small>
+                </div>
+            </div>
+            <div class="submission">
+                <div class="submit-button">
+                    <button mat-button type="submit" class="submit" [disabled]="SignupForm.invalid">Sign up</button>
+                </div>
+                <div class="login-button">
+                    <p>Have an account already?</p>
+                    <a href="">Login</a>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
