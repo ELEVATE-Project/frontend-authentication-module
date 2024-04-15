@@ -1,1 +1,60 @@
-<p>login works!</p>
+
+
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+
+<div class="app-login">
+  <nav>
+    <button mat-icon-button class="head-arrow">
+      <mat-icon>keyboard_backspace</mat-icon>
+    </button>
+    <a class="red">Sign up</a>
+  </nav>
+
+  <div class="main-form">
+    <div class="heading">
+      <div><span>Login to Mentor</span> <span class="green">ED</span></div>
+      <div class="underline"><span></span></div>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <mat-form-field *ngFor="let field of formFields" class="form-field" [class.error]="isFieldInvalid(field)">
+        <div [class.active]="isActive(field) && !loginForm.get(field.name)?.invalid" class="form-label">
+          <span>{{ field.label }}</span><span class="text-danger">*</span>
+        </div>
+        <div class="password">
+          <input matInput [type]="field.type" [formControlName]="field.name" class="form-control"
+            (focus)="setActive(field, true)" (blur)="setActive(field, false)" />
+          <mat-icon *ngIf="field.showIcon" class="display" (click)="togglePasswordVisibility(field)">{{ field.icon }}</mat-icon>
+        </div>
+        <div class="underline-form" [class.underline-red]="isFieldInvalid(field)">
+          <span></span>
+        </div>
+        <div class="text-danger form-validation" *ngIf="isFieldInvalid(field)">
+          <span class="error-flex" *ngFor="let error of getFieldErrors(field)">
+            <mat-icon class="error-icon">error_outline</mat-icon>
+            <div>{{ error.message }}</div>
+          </span>
+        </div>
+      </mat-form-field>
+
+      <re-captcha formControlName="recaptchaReactive" class="captcha" required siteKey="6LdepbopAAAAAPHiC_sOUp5ASccViwWbZxQHGqBp"></re-captcha>
+
+      <button type="submit" [disabled]="loginForm.invalid" class="login-button">Login</button>
+
+      <div class="forgot-password">
+        <a>Forgot password?</a>
+      </div>
+    </form>
+
+    <div class="additional-info">
+    Having trouble in logging in/signing up? Write to us at support.shikshalokam.org
+    </div>
+
+    <div class="terms">
+      By continuing, you agree to accept our
+      <a class="blue">Privacy Policy</a> &
+      <a class="blue">Terms of Service</a>
+    </div>
+  </div>
+</div>
+
