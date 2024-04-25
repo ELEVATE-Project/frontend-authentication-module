@@ -23,7 +23,8 @@
               "projects/sl-auth-app/src/assets"
             ],
             "styles": [
-              "projects/sl-auth-app/src/styles.css"
+              "projects/sl-auth-app/src/styles.css",
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
             ],
             "scripts": []
           },
@@ -85,7 +86,8 @@
               "projects/sl-auth-app/src/assets"
             ],
             "styles": [
-              "projects/sl-auth-app/src/styles.css"
+              "projects/sl-auth-app/src/styles.css",
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css"
             ],
             "scripts": []
           }

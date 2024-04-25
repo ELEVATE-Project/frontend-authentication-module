@@ -12,7 +12,7 @@ import { SlAuthLibraryModule } from 'sl-auth-library';
   imports: [
     BrowserModule,
     AppRoutingModule,
-    SlAuthLibraryModule
+    SlAuthLibraryModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
