@@ -1,0 +1,80 @@
+
+.body {
+    background-color: #222;
+    color: #fff;
+}
+
+.header {
+    background-color: #111;
+}
+
+.head-arrow:hover {
+    background-color: #444;
+    cursor: pointer;
+}
+
+.signup.wrapper {
+    background-color: #333;
+    color: #fff;
+}
+
+.generic-header {
+    color: #fff;
+}
+
+.text-config {
+    color: #39ff14; /* Green color */
+}
+
+.text-config::after {
+    background-color: #69f517; /* Darker green */
+}
+
+.text-green {
+    color: #6df144; /* Darker green */
+}
+
+.form-control {
+    border-bottom: 0.125rem solid #8c8273; /* Darker grey */
+}
+
+.pass-field {
+    border-bottom: 0.125rem solid #8c8273; /* Darker grey */
+}
+
+.error,
+.error_outline {
+    color: #ec4e63; /* Red */
+}
+
+.visibility {
+    border-bottom: 0.125rem solid #8c8273; /* Darker grey */
+}
+
+.required {
+    color: #f44336; /* Red */
+}
+
+.hideshow {
+    color: #8c8273; /* Darker grey */
+}
+
+.error_message_outer {
+    color: #ec4e63; /* Red */
+}
+
+.active {
+    color: #892d21; /* Darker brown */
+}
+
+.submit {
+    background-color: #832115; /* Darker red */
+}
+
+.submit:disabled {
+    background-color: #92949c; /* Darker grey */
+}
+
+a {
+    color: #ec4e63; /* Red */
+}
