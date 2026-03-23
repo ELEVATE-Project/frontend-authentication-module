@@ -28,11 +28,12 @@ export class ApiBaseService {
     }));
   }
 
-  get<T>(baseURL:string, url: string, params?: HttpParams): Observable<T> {
+  get<T>(baseURL:string, url: string, params?: HttpParams, tenantId?: string): Observable<T> {
     if (!this.isOnline()) {
       return this.handleOffline();
     }
-    return this.http.get<T>(baseURL + url, { params });
+    const headers = tenantId ? new HttpHeaders().set('Tenantid', tenantId) : undefined;
+    return this.http.get<T>(baseURL + url, { params, headers });
   }
 
   post<T>(baseURL:string, url: string, body: any, headers?: HttpHeaders): Observable<T> {

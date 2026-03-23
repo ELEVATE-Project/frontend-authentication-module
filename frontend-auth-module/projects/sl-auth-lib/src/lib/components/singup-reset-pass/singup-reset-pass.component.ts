@@ -41,6 +41,23 @@ export class SingupResetPassComponent {
         },
       },
       {
+        name: 'username',
+        label: 'Username',
+        value: '',
+        class: 'ion-no-margin',
+        type: 'text',
+        position: 'floating',
+        errorMessage: {
+          required: "Enter Username",
+          pattern: "This field can only contain alphabets"
+        },
+        validators: {
+          required: true,
+          pattern: /^[a-zA-Z\s]*$/,
+          maxLength:50
+        },
+      },
+      {
         name: 'email',
         label: 'Email',
         value: '',
@@ -90,6 +107,183 @@ export class SingupResetPassComponent {
           minLength: 10,
         },
       },
+
+      {
+        name: 'role',
+        label: 'Role',
+        value: '',
+        class: 'ion-no-margin',
+        type: 'select',
+        position: 'floating',
+        options: [
+        { label: 'Student', value: 'student' },
+        { label: 'Teacher', value: 'teacher' },
+        { label: 'Admin', value: 'schoolHead' }
+         ],
+        errorMessage: {
+          required: "Enter Name",
+          pattern: "This field can only contain alphabets"
+        },
+        validators: {
+          required: true,
+          // pattern: /^[a-zA-Z\s]*$/,
+          // maxLength:50
+        },
+      },
+
+      {
+        name: 'subRole',
+        label: 'Sub-Role',
+        value: '',
+        class: 'ion-no-margin',
+        type: 'select',
+        position: 'floating',
+        options: [
+        { label: 'Student', value: 'student' },
+        { label: 'Teacher', value: 'teacher' },
+        { label: 'Admin', value: 'schoolHead' }
+         ],
+        errorMessage: {
+          required: "Enter Name",
+          pattern: "This field can only contain alphabets"
+        },
+        validators: {
+          // required: true,
+          // pattern: /^[a-zA-Z\s]*$/,
+          maxLength:50
+        },
+      },
+
+      {
+        name: 'registrationCode',
+        label: 'Registration Code',
+        value: '',
+        class: 'ion-no-margin',
+        type: 'text',
+        position: 'floating',
+        errorMessage: {
+          required: "Enter Registration Code",
+          pattern: "This field can only contain alphabets"
+        },
+        validators: {
+          required: true,
+          pattern: /^[a-zA-Z\s]*$/,
+          maxLength:50
+        },
+      },
+
+      {
+        name: 'udise',
+        label: 'UDISE Code',
+        value: '',
+        class: 'ion-no-margin',
+        type: 'text',
+        position: 'floating',
+        errorMessage: {
+          required: "Enter UDISE Code",
+          pattern: "This field can only contain numbers"
+        },
+        validators: {
+          required: true,
+          pattern: /^[0-9]*$/,
+          maxLength:50
+        },
+      },
+
+      {
+        name: 'state',
+        label: 'State',
+        value: '',
+        class: 'ion-no-margin',
+        type: 'text',
+        position: 'floating',
+        disabled:true,
+        errorMessage: {
+          required: "Enter State",
+          pattern: "This field can only contain alphabets"
+        },
+        validators: {
+          required: true,
+          pattern: /^[a-zA-Z\s]*$/,
+          maxLength:50,
+        },
+      },
+
+      {
+        name: 'district',
+        label: 'District',
+        value: '',
+        class: 'ion-no-margin',
+        type: 'text',
+        position: 'floating',
+        disabled:true,
+        errorMessage: {
+          required: "Enter District",
+          pattern: "This field can only contain alphabets"
+        },
+        validators: {
+          required: true,
+          pattern: /^[a-zA-Z\s]*$/,
+          maxLength:50,
+        },
+      },
+
+      {
+        name: 'block',
+        label: 'Block',
+        value: '',
+        class: 'ion-no-margin',
+        type: 'text',
+        position: 'floating',
+        disabled:true,
+        errorMessage: {
+          required: "Enter Block",
+          pattern: "This field can only contain alphabets"
+        },
+        validators: {
+          required: true,
+          pattern: /^[a-zA-Z\s]*$/,
+          maxLength:50,
+        },
+      },
+
+      {
+        name: 'cluster',
+        label: 'Cluster',
+        value: '',
+        class: 'ion-no-margin',
+        type: 'text',
+        position: 'floating',
+        disabled:true,
+        errorMessage: {
+          required: "Enter Cluster",
+          pattern: "This field can only contain alphabets"
+        },
+        validators: {
+          required: true,
+          pattern: /^[a-zA-Z\s]*$/,
+          maxLength:50,
+        },
+      },
+
+      {
+        name: 'school',
+        label: 'School',
+        value: '',
+        class: 'ion-no-margin',
+        type: 'text',
+        position: 'floating',
+        disabled:true,
+        errorMessage: {
+          required: "Enter School",
+          pattern: "This field can only contain alphabets"
+        },
+        validators: {
+          required: true,
+          pattern: /^[a-zA-Z\s]*$/,
+          maxLength:50,
+        },
+      },
     ],
   };
 
@@ -110,6 +304,7 @@ export class SingupResetPassComponent {
       this.updateLabelsForReset();
     }
     this.fetchConfigData();
+    this.fetchProfessionalRoles();
   }
 
   updateLabelsForReset() {
@@ -161,4 +356,71 @@ export class SingupResetPassComponent {
     return this.mode === 'signup' ? `Signup to ${this.configData?.projectName}` : 'Reset password';
   }
 
+  fetchUdiseCode(){
+    console.log("343", this.formLib?.myForm.value)
+    this.baseApiService
+      .get(
+        this.configData?.baseUrl,
+        this.configData?.fetchUdiseCodeApiPath + '/' + this.formLib?.myForm.value.udise,
+        undefined,
+        this.configData?.tenantId
+        
+      ).pipe(
+        catchError((error) => {
+          this.toastService.showToast(error?.error?.message, 'error', 3000, 'top', 'end');
+          throw error
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          if (res?.result) {
+            console.log("res 358", res)
+            if (res?.result && res.result.length > 0) {
+        const schoolData = res.result[0]; 
+        const parents = schoolData.parentInformation; 
+        console.log("result 364", res.result )
+        
+        this.formLib?.myForm.patchValue({
+          school: schoolData.metaInformation?.name,
+          state: parents?.state?.[0]?.name,       
+          district: parents?.district?.[0]?.name,
+          block: parents?.block?.[0]?.name,
+          cluster: parents?.cluster?.[0]?.name
+        });
+        console.log("form value 395", this.formLib?.myForm.value)
+      }
+          } else {
+            this.toastService.showToast(res?.message, 'error', 3000, 'top', 'end');
+          }
+        }
+      );
+  }
+   
+  fetchProfessionalRoles(){
+    console.log("405", "fetch professional roles")
+
+    this.baseApiService
+      .get(
+        this.configData?.baseUrl,
+        this.configData?.entityType,
+        undefined,
+        this.configData?.tenantId
+        
+      ).pipe(
+        catchError((error) => {
+          this.toastService.showToast(error?.error?.message, 'error', 3000, 'top', 'end');
+          throw error
+        })
+      )
+      .subscribe(
+        (res: any) => {
+          if (res?.result) {
+            console.log("res 427", res)
+           
+          } else {
+            this.toastService.showToast(res?.message, 'error', 3000, 'top', 'end');
+          }
+        }
+      );
+  }
 }
