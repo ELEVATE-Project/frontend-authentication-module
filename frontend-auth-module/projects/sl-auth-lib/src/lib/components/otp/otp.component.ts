@@ -8,12 +8,14 @@ import { Subscription, interval } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ToastService } from '../../services/toast/toast.service';
 import { OTP_LENGTH } from '../shared/constants';
+import { MainFormComponent } from 'elevate-dynamic-form/lib/components/main-form/main-form.component';
 @Component({
   selector: 'lib-otp',
   templateUrl: './otp.component.html',
   styleUrls: ['./otp.component.css']
 })
 export class OtpComponent implements OnInit, OnDestroy {
+   @ViewChild('formLib') formLib: MainFormComponent | undefined;
   configData: any;
   endPointService: EndpointService;
   location: Location;
@@ -82,11 +84,35 @@ export class OtpComponent implements OnInit, OnDestroy {
     const isReset = this.regFormData?.fromPage === "reset";
 
     let payload = {
+      block: null,
+      cluster: null,
+      district: null,
+
       email: this.regFormData?.email,
       password: this.regFormData?.password,
       name: isSignup ? this.regFormData?.name : null,
-      otp: action === 'verify' ? this.otp : null
+      otp: action === 'verify' ? this.otp : null,
+
+      professional_role: null,
+      professional_subroles: null,
+      registration_code: null,
+      school: null,
+      state: null,
+      username: null
+
     };
+
+    if (action === 'verify') {
+      payload.block = this.formLib?.myForm.value.block;
+      payload.cluster = this.formLib?.myForm.value.cluster;
+      payload.district = this.formLib?.myForm.value.district;
+      payload.state = this.formLib?.myForm.value.state;
+      payload.school = this.formLib?.myForm.value.school;
+      payload.professional_role = this.regFormData?.role;
+      payload.professional_subroles = this.regFormData?.subRole;
+      payload.registration_code = this.regFormData?.registrationCode;
+      payload.username = this.regFormData?.username;
+    }
 
     if (isReset && action === 'generate') {
       delete payload.name;

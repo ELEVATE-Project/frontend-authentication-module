@@ -9,6 +9,12 @@
     </div>
     <form>
         <dynamic-form [formJson]="formJson.controls" #formLib></dynamic-form>
+
+         <button type="button"
+             (click)="fetchUdiseCode()">
+            Fetch UDISE Code
+        </button>
+
         <button type="button" [disabled]="formLib?.myForm?.invalid"
             [ngClass]="{'btn-disabled': formLib?.myForm?.invalid}" (click)="navigateToGenerateOtpPage()">
             {{ mode === 'signup' ? 'Validate OTP' : 'Reset Password' }}
