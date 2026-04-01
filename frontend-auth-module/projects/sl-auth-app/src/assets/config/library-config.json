@@ -2,7 +2,7 @@
     "projectName": "PWA",
     "landingPageTitle": "Create account to connect, solve & share.",
     "baseUrl": "https://qa.elevate-apis.shikshalokam.org",
-    "redirectRouteOnLoginSuccess": "observation",
+    "redirectRouteOnLoginSuccess": "landing",
     "loginApiPath": "/user/v1/account/login",
     "logoutApiPath": "/user/v1/account/logout",
     "signUpApiPath": "/interface/v1/account/create",
@@ -14,7 +14,7 @@
     "privacyPolicyUrl":"https://www.privacyploicy.com",
     "termOfUseUrl":"https://www.termsofuse.com",
     "initialPage": true,
-    "initialPagePath":"intro",
+    "initialPagePath":"landing",
     "tenantId" : "shikshalokam",
     "entityType": "/entity-management/v1/entities/entityListBasedOnEntityType"
     
