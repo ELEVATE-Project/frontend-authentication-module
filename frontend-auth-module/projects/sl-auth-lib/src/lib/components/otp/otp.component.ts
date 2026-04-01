@@ -21,7 +21,7 @@ export class OtpComponent implements OnInit, OnDestroy {
   location: Location;
   otpInput: boolean = false;
   regFormData: any;
-  otp: string = '';
+  otp: any;
   checkbox: boolean = false;
   baseApiService: ApiBaseService;
   toastService: ToastService;
@@ -38,6 +38,7 @@ export class OtpComponent implements OnInit, OnDestroy {
       'border-radius': '8px'
     }
   };
+  payloadForReset: any;
 
   constructor(private stateService: StateService, private renderer: Renderer2) {
     this.baseApiService = inject(ApiBaseService);
@@ -84,38 +85,29 @@ export class OtpComponent implements OnInit, OnDestroy {
     const isReset = this.regFormData?.fromPage === "reset";
 
     let payload = {
-      block: null,
-      cluster: null,
-      district: null,
+      block: this.regFormData?.block ,
+      cluster: this.regFormData?.cluster,
+      district:this.regFormData?.district,
 
       email: this.regFormData?.email,
       password: this.regFormData?.password,
       name: isSignup ? this.regFormData?.name : null,
-      otp: action === 'verify' ? this.otp : null,
+      otp: action === 'verify' ? Number(this.otp) : null,
 
-      professional_role: null,
-      professional_subroles: null,
-      registration_code: null,
-      school: null,
-      state: null,
-      username: null
+      professional_role: this.regFormData?.professional_role,
+      professional_subroles: this.regFormData?.professional_subroles,
+      school: this.regFormData?.school,
+      state:  this.regFormData?.state,
+      username:this.regFormData?.username
 
     };
 
-    if (action === 'verify') {
-      payload.block = this.formLib?.myForm.value.block;
-      payload.cluster = this.formLib?.myForm.value.cluster;
-      payload.district = this.formLib?.myForm.value.district;
-      payload.state = this.formLib?.myForm.value.state;
-      payload.school = this.formLib?.myForm.value.school;
-      payload.professional_role = this.regFormData?.role;
-      payload.professional_subroles = this.regFormData?.subRole;
-      payload.registration_code = this.regFormData?.registrationCode;
-      payload.username = this.regFormData?.username;
-    }
-
-    if (isReset && action === 'generate') {
-      delete payload.name;
+    if (isReset) {
+      this.payloadForReset = {
+        identifier: this.regFormData?.email,
+        password: this.regFormData?.password,
+        otp: action === 'verify' ? Number(this.otp) : null,
+      }
     }
 
     const apiPaths = {
@@ -135,7 +127,7 @@ export class OtpComponent implements OnInit, OnDestroy {
     const selectedApiPath = actionType ? apiPaths[actionType]?.[action] : "";
 
     this.baseApiService
-      .post(this.configData?.baseUrl, this.configData?.[selectedApiPath], payload)
+      .post(this.configData?.baseUrl, this.configData?.[selectedApiPath], (isReset) ? this.payloadForReset : payload)
       .pipe(
         catchError((error) => {
           this.toastService.showToast(error?.error?.message || `An error occurred during ${action} OTP`, 'error', 3000, 'top', 'end')
@@ -195,15 +187,15 @@ export class OtpComponent implements OnInit, OnDestroy {
     }
   }
 
-  handleFillEvent(value: string): void {
-    this.otp = value;
+  handleFillEvent(value: any): void {
+    this.otp = Number(value);
   }
 
   onOtpChange(otp: any) {
-    this.otp = otp;
+    this.otp = Number(otp);
   }
 
-  isOtpValid(): boolean {
-    return this.otp?.length === OTP_LENGTH && this.checkbox;
-  }
+ isOtpValid(): boolean {
+  return this.otp?.toString().length === OTP_LENGTH && this.checkbox;
+}
 }
