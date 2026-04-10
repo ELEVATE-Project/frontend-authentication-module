@@ -23,7 +23,7 @@ export class LoginComponent {
   formJson: any = {
     controls: [
       {
-        name: 'email',
+        name: 'identifier',
         label: 'Email',
         value: '',
         class: 'ion-no-margin',

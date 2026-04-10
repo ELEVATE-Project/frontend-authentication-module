@@ -9,10 +9,17 @@
     </div>
     <form>
         <dynamic-form [formJson]="formJson.controls" #formLib></dynamic-form>
-        <button type="button" [disabled]="formLib?.myForm?.invalid"
+
+         <button *ngIf="mode === 'signup'" type="button" [disabled]="!formLib?.myForm?.value?.udise?.trim()"
+         [ngClass]="{'btn-disabled': !formLib?.myForm?.value?.udise?.trim()}"
+             (click)="fetchUdiseCode()">
+            Fetch UDISE Code
+        </button>
+
+        <button type="button" [disabled]="formLib?.myForm?.invalid && !formLib?.myForm?.value?.state"
             [ngClass]="{'btn-disabled': formLib?.myForm?.invalid}" (click)="navigateToGenerateOtpPage()">
             {{ mode === 'signup' ? 'Validate OTP' : 'Reset Password' }}
-        </button>
+        </button>    
     </form>
     <p *ngIf="mode === 'signup'" class="loginRoute">Have an account already? <br> <a routerLink="/login">Login</a></p>
 </div>

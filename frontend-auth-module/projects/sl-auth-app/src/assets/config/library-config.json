@@ -1,17 +1,21 @@
 {
     "projectName": "PWA",
     "landingPageTitle": "Create account to connect, solve & share.",
-    "baseUrl": "https://dev.elevate-apis.shikshalokam.org",
-    "redirectRouteOnLoginSuccess": "observation",
-    "loginApiPath": "/elevate-interface/v2/account/login",
-    "logoutApiPath": "/elevate-user/v1/account/logout",
-    "signUpApiPath": "/elevate-interface/v2/account/create",
-    "resetPasswordApiPath": "/elevate-user/v1/account/resetPassword",
-    "otpGenerationApiPathForRegistration": "/elevate-user/v1/account/registrationOtp",
-    "otpGenerationApiPathForResetPassword": "/elevate-user/v1/account/generateOtp",
+    "baseUrl": "https://qa.elevate-apis.shikshalokam.org",
+    "redirectRouteOnLoginSuccess": "landing",
+    "loginApiPath": "/user/v1/account/login",
+    "logoutApiPath": "/user/v1/account/logout",
+    "signUpApiPath": "/interface/v1/account/create",
+    "resetPasswordApiPath": "/user/v1/account/resetPassword",
+    "otpGenerationApiPathForRegistration": "/user/v1/account/registrationOtp",
+    "otpGenerationApiPathForResetPassword": "/user/v1/account/generateOtp",
+    "fetchUdiseCodeApiPath": "/entity-management/v1/entities/details",
     "supportEmail":"mentoredtest1@yopmail.com",
     "privacyPolicyUrl":"https://www.privacyploicy.com",
     "termOfUseUrl":"https://www.termsofuse.com",
     "initialPage": true,
-    "initialPagePath":"intro"
+    "initialPagePath":"landing",
+    "tenantId" : "shikshalokam",
+    "entityType": "/entity-management/v1/entities/entityListBasedOnEntityType"
+    
 }

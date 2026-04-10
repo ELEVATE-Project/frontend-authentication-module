@@ -4,7 +4,7 @@ import { LoginComponent } from './components/login/login.component';
 import { SlRoutingRoutingModule } from './sl-routing-routing.module';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { DynamicFormModule } from 'elevate-dynamic-form';
+import { DynamicFormModule } from 'dynamic-form-suma';
 import { LandingComponent } from './components/landing/landing.component';
 import { MatIconModule } from '@angular/material/icon';
 import { OtpComponent } from './components/otp/otp.component';

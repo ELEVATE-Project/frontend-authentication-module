@@ -53,40 +53,53 @@ export class AuthService {
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.loggedIn = false;
-        const payload = {
-          refresh_token: localStorage?.getItem('refToken')
-        };
-
-        this.baseApiService
-          .post(
-            this.configData?.baseUrl,
-            this.configData?.logoutApiPath,
-            payload
-          ).pipe(
-            catchError((error) => {
-              this.toastService.showToast(error?.error?.message || `An error occurred during logout`, 'error', 3000, 'top', 'end');
-              throw error;
-            })
-          )
-          .subscribe(
-            (res: any) => {
-              if (res?.responseCode === "OK") {
-                localStorage.clear();
-                this.sendMessage();
-                if(this.configData?.initialPage){
-                  this.router.navigateByUrl(this.configData?.initialPagePath);
-                }
-                else{
-                  this.router.navigate(['/login']);
-                }
-              } else {
-                this.toastService.showToast(res?.message || `Logout unsuccessful`, 'error', 3000, 'top', 'end');
-              }
-            }
-          );
+        localStorage.clear();
+        this.sendMessage();
+        this.router.navigate(['/login']);
       }
     });
   }
+
+  // async logout() {
+  //   const dialogRef = this.dialog.open(ModelComponent);
+
+  //   dialogRef.afterClosed().subscribe(result => {
+  //     if (result) {
+  //       this.loggedIn = false;
+  //       const payload = {
+  //         refresh_token: localStorage?.getItem('refToken')
+  //       };
+
+  //       this.baseApiService
+  //         .post(
+  //           this.configData?.baseUrl,
+  //           this.configData?.logoutApiPath,
+  //           payload
+  //         ).pipe(
+  //           catchError((error) => {
+  //             this.toastService.showToast(error?.error?.message || `An error occurred during logout`, 'error', 3000, 'top', 'end');
+  //             throw error;
+  //           })
+  //         )
+  //         .subscribe(
+  //           (res: any) => {
+  //             if (res?.responseCode === "OK") {
+  //               localStorage.clear();
+  //               this.sendMessage();
+  //               if(this.configData?.initialPage){
+  //                 this.router.navigateByUrl(this.configData?.initialPagePath);
+  //               }
+  //               else{
+  //                 this.router.navigate(['/login']);
+  //               }
+  //             } else {
+  //               this.toastService.showToast(res?.message || `Logout unsuccessful`, 'error', 3000, 'top', 'end');
+  //             }
+  //           }
+  //         );
+  //     }
+  //   });
+  // }
 
   sendMessage() {
     const message = { msg:'logout successful' };
