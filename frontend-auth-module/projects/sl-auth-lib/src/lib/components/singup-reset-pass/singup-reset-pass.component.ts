@@ -17,6 +17,7 @@ import { SIGNUP_FORM_CONFIG } from '../shared/forms/signup-form.config';
 export class SingupResetPassComponent {
   @ViewChild('formLib') formLib: MainFormComponent | undefined;
   mode: 'signup' | 'reset' = 'signup';
+  private readonly formConfig = SIGNUP_FORM_CONFIG.data.config;
   baseApiService: ApiBaseService;
   endPointService: EndpointService;
   router: Router;
@@ -42,7 +43,7 @@ export class SingupResetPassComponent {
       JSON.stringify(SIGNUP_FORM_CONFIG.data.fields)
     );
     if (this.mode === 'reset') {
-      const allowedFields = ['email', 'password', 'confirm_password'];
+      const allowedFields = this.getResetAllowedFields();
 
       this.formJson.controls = this.formJson.controls.filter(
         (control: any) => allowedFields.includes(control.name)
@@ -65,13 +66,13 @@ export class SingupResetPassComponent {
     const passwordControl = this.formJson.controls.find((control: any) => control.name === 'password');
     const confirmPasswordControl = this.formJson.controls.find((control: any) => control.name === 'confirm_password');
     if (passwordControl) {
-      passwordControl.label = 'Enter new password';
-      passwordControl.errorMessage.required = 'Enter new password';
+      passwordControl.label = this.getResetPasswordLabel();
+      passwordControl.errorMessage.required = this.getResetPasswordRequiredMessage();
     }
   
     if (confirmPasswordControl) {
-      confirmPasswordControl.label = 'Confirm new password';
-      confirmPasswordControl.errorMessage.required = 'Re-enter new password';
+      confirmPasswordControl.label = this.getConfirmResetPasswordLabel();
+      confirmPasswordControl.errorMessage.required = this.getConfirmResetPasswordRequiredMessage();
     }
   }
 
@@ -115,9 +116,6 @@ export class SingupResetPassComponent {
 
     roleId = selectedRole?.id || null;
 
-    // ✅ extract SUB ROLE IDS (multi-select)
-    const subRoleField = this.formJson.controls.find((f: any) => f.name === 'subRole');
-
     subRoleIds = (formData.subRole || []).map((item: any) => item.id);
   }
 
@@ -126,13 +124,7 @@ export class SingupResetPassComponent {
     ...formData,
     professional_role: roleId,
     professional_subroles: subRoleIds,
-
-    school: this.selectedLocationData?.school?.id,
-    state: this.selectedLocationData?.state?.id,
-    district: this.selectedLocationData?.district?.id,
-    block: this.selectedLocationData?.block?.id,
-    cluster: this.selectedLocationData?.cluster?.id,
-
+    ...this.buildLocationPayload(),
     fromPage: this.mode
   };
 
@@ -149,7 +141,12 @@ export class SingupResetPassComponent {
   }
 
   get headerText(): string {
-    return this.mode === 'signup' ? `Signup to ${this.configData?.projectName}` : 'Reset password';
+    if (this.mode === 'signup') {
+      const template = this.getFormConfig('signupHeaderTemplate') || 'Signup to {projectName}';
+      return template.replace('{projectName}', this.configData?.projectName || '');
+    }
+
+    return this.getFormConfig('resetHeaderText') || 'Reset password';
   }
 
   fetchUdiseCode(){
@@ -170,47 +167,23 @@ export class SingupResetPassComponent {
         (res: any) => {
           if (res?.result) {
             if (res?.result && res.result.length > 0) {
-        const schoolData = res.result[0]; 
-        const parents = schoolData.parentInformation; 
+        const schoolData = res.result[0];
+        const { formPatchData, selectedLocationData } = this.buildLocationData(schoolData);
+        const controlNames = new Set(
+          (this.formJson?.controls || []).map((control: any) => control.name)
+        );
+        const patchableData = Object.fromEntries(
+          Object.entries(formPatchData).filter(([field]) => controlNames.has(field))
+        );
 
               setTimeout(() => {
                 const form = this.formLib?.myForm;
                 if (!form) return;
 
-                form.patchValue({
-                  school: schoolData?.metaInformation?.name || '',
-                  state: parents?.state?.[0]?.name || '',
-                  district: parents?.district?.[0]?.name || '',
-                  block: parents?.block?.[0]?.name || '',
-                  cluster: parents?.cluster?.[0]?.name || ''
-                });
+                form.patchValue(patchableData);
+                this.selectedLocationData = selectedLocationData;
 
-                this.selectedLocationData = {
-                  school: {
-                    id: schoolData?._id,
-                    name: schoolData?.metaInformation?.name
-                  },
-                  state: {
-                    id: parents?.state?.[0]?._id,
-                    name: parents?.state?.[0]?.name
-                  },
-                  district: {
-                    id: parents?.district?.[0]?._id,
-                    name: parents?.district?.[0]?.name
-                  },
-                  block: {
-                    id: parents?.block?.[0]?._id,
-                    name: parents?.block?.[0]?.name
-                  },
-                  cluster: {
-                    id: parents?.cluster?.[0]?._id,
-                    name: parents?.cluster?.[0]?.name
-                  }
-                };
-
-
-                // disable AFTER form is created
-                ['school', 'state', 'district', 'block', 'cluster'].forEach(field => {
+                Object.keys(patchableData).forEach((field) => {
                   form.get(field)?.disable();
                 });
 
@@ -222,6 +195,65 @@ export class SingupResetPassComponent {
           }
         }
       );
+  }
+
+  private buildLocationData(schoolData: any) {
+    const parents = schoolData?.parentInformation ?? {};
+    const formPatchData: Record<string, string> = {
+      school: schoolData?.metaInformation?.name || ''
+    };
+    const selectedLocationData: Record<string, { id: string; name: string }> = {
+      school: {
+        id: schoolData?._id || '',
+        name: schoolData?.metaInformation?.name || ''
+      }
+    };
+
+    Object.entries(parents).forEach(([key, value]: [string, any]) => {
+      const parent = Array.isArray(value) ? value[0] : value;
+
+      formPatchData[key] = parent?.name || '';
+      selectedLocationData[key] = {
+        id: parent?._id || parent?.id || '',
+        name: parent?.name || ''
+      };
+    });
+
+    return { formPatchData, selectedLocationData };
+  }
+
+  private buildLocationPayload(): Record<string, string> {
+    return Object.entries(this.selectedLocationData || {}).reduce(
+      (payload: Record<string, string>, [key, value]: [string, any]) => {
+        payload[key] = value?.id || '';
+        return payload;
+      },
+      {}
+    );
+  }
+
+  private getResetAllowedFields(): string[] {
+    return this.getFormConfig('resetAllowedFields') || ['email', 'password', 'confirm_password'];
+  }
+
+  private getResetPasswordLabel(): string {
+    return this.getFormConfig('resetPasswordLabel') || 'Enter new password';
+  }
+
+  private getConfirmResetPasswordLabel(): string {
+    return this.getFormConfig('confirmResetPasswordLabel') || 'Confirm new password';
+  }
+
+  private getResetPasswordRequiredMessage(): string {
+    return this.getFormConfig('resetPasswordRequiredMessage') || 'Enter new password';
+  }
+
+  private getConfirmResetPasswordRequiredMessage(): string {
+    return this.getFormConfig('confirmResetPasswordRequiredMessage') || 'Re-enter new password';
+  }
+
+  private getFormConfig<K extends keyof typeof this.formConfig>(key: K): (typeof this.formConfig)[K] {
+    return this.formConfig[key];
   }
 
   fetchProfessionalRoles() {

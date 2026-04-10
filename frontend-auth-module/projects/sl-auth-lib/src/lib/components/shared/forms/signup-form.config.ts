@@ -1,10 +1,19 @@
 export const SIGNUP_FORM_CONFIG = {
-    "type": "signUpForm",
-    "sub_type": "SignUpForm",
-    "action": "create",
-    "data": {
-        "templateName": "defaultTemplate",
-        "fields": {
+    "type": "signUpForm",
+    "sub_type": "SignUpForm",
+    "action": "create",
+    "data": {
+        "config": {
+            "signupHeaderTemplate": "Signup to {projectName}",
+            "resetHeaderText": "Reset password",
+            "resetAllowedFields": ["email", "password", "confirm_password"],
+            "resetPasswordLabel": "Enter new password",
+            "confirmResetPasswordLabel": "Confirm new password",
+            "resetPasswordRequiredMessage": "Enter new password",
+            "confirmResetPasswordRequiredMessage": "Re-enter new password"
+        },
+        "templateName": "defaultTemplate",
+        "fields": {
             "controls": [
                 {
                     "name": "name",
